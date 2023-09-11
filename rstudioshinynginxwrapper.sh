@@ -85,22 +85,6 @@ R -e "install.packages(c('chron','countrycode','geojsonio','shinythemes','shinyT
 
 R -e "install.packages(c('directlabels'), repos='http://r-forge.r-project.org/', lib='~/R/x86_64-pc-linux-gnu-library/4.0')" && rm -rf /tmp/downloaded_packages
 
-# Install Shiny-Server
-wget --no-verbose https://download3.rstudio.org/ubuntu-18.04/x86_64/VERSION -O "version.txt"
-VERSION=$(cat version.txt)  
-wget --no-verbose "https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb
-sudo gdebi -n ss-latest.deb
-rm -f version.txt ss-latest.deb
-
-# Configure Shiny-Server
-sudo wget https://raw.githubusercontent.com/Jtsmith275/RStudioNginxShiny/master/shiny-server.conf -O /etc/shiny-server/shiny-server.conf
-sudo sed -i "s/run_as shiny/run_as $USER/" /etc/shiny-server/shiny-server.conf
-sudo sed -i "s/site_dir \/srv\/shiny-server/site_dir \/home\/$USER\/shiny/" /etc/shiny-server/shiny-server.conf
-mkdir $HOME/shiny
-
-# Copy sample apps to users new Shiny dir
-cp -r /opt/shiny-server/samples/sample-apps/hello/ ~/shiny
-
 # Restart services
 sudo systemctl restart nginx
 sudo systemctl enable nginx
